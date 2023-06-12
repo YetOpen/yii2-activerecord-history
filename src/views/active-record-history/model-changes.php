@@ -77,6 +77,10 @@ $columns = [
         'attribute' => 'action',
         'label' => Yii::t('arh', 'Action'),
     ],
+    'app_id' => [
+        'attribute' => 'app_id',
+        'label' => Yii::t('arh', 'App ID'),
+    ],
 ];
 
 if($module->changesHistoryColumns) {
