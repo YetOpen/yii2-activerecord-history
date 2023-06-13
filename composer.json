@@ -1,5 +1,5 @@
 {
-    "name": "nhkey/yii2-activerecord-history",
+    "name": "yetopen/yii2-activerecord-history",
     "description": "Storage history of changes to ActiveRecord",
     "keywords": ["yii2", "history", "activerecord"],
     "type": "yii2-extension",
@@ -9,12 +9,16 @@
         {
             "name": "Mikhail Mikhalev",
             "email": "mail@mikhailmikhalev.ru"
+        },
+        {
+            "name": "YetOpen",
+            "email": "assistenza@yetopen.com"
         }
     ],
     "require": {
         "yiisoft/yii2": "*"
     },
     "autoload": {
-        "psr-4": { "nhkey\\arh\\": "src\\" }
+        "psr-4": { "yetopen\\arh\\": "src\\" }
     }
 }

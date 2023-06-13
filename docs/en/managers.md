@@ -15,7 +15,7 @@ DBManager is manager for saving your ActiveRecord-object's history in database. 
 For use you need run 
 
 ```
-php yii migrate --migrationPath=@vendor/nhkey/yii2-activerecord-history/migrations
+php yii migrate --migrationPath=@vendor/yetopen/yii2-activerecord-history/migrations
 ```
 
 
@@ -30,4 +30,4 @@ FileManager is manager for saving your ActiveRecord-object's history in filesyst
 - **filename** - filename for file with history log;
 
 
-[Back To Main page](https://github.com/nhkey/yii2-activerecord-history/blob/master/README.md)
+[Back To Main page](https://github.com/yetopen/yii2-activerecord-history/blob/master/README.md)
