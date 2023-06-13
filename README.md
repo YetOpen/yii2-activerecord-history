@@ -1,7 +1,7 @@
 Yii2 ActiveRecord History Extension for Yii 2
 =========================
 
-> *The original repository was cloned from [here](https://github.com/yetopen/yii2-activerecord-history)*
+> *The original repository was cloned from [here](https://github.com/nhkey/yii2-activerecord-history)*
 
 This extension adds storage history of changes to the AR model
 
