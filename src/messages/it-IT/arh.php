@@ -14,4 +14,5 @@ return [
     'Update' => 'Modifica',
     'Update ID' => 'Modifica ID',
     'Delete' => 'Cancellazione',
+    'Application' => 'Applicazione',
 ];
