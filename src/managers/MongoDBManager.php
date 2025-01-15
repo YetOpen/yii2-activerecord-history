@@ -1,6 +1,6 @@
 <?php
 
-namespace nhkey\arh\managers;
+namespace yetopen\arh\managers;
 
 use Yii;
 use yii\mongodb\Connection;
@@ -8,7 +8,7 @@ use yii\di\Instance;
 
 /**
  * Class MongoDBManager for save history in DB
- * @package nhkey\arh
+ * @package yetopen\arh
  */
 class MongoDBManager extends DBManager
 {

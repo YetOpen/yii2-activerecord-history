@@ -6,7 +6,7 @@ Easy way:
     class MyClass extends ActiveRecord {
      public function behaviors(){
             return [
-                \nhkey\arh\ActiveRecordHistoryBehavior::className(),
+                \yetopen\arh\ActiveRecordHistoryBehavior::className(),
                 ...
             ];
         }
@@ -19,7 +19,7 @@ If you want use not default manager or set options for manager, you may use this
      public function behaviors(){
             return [
                 'history' => [
-                    'class' => \nhkey\arh\ActiveRecordHistoryBehavior::className(),
+                    'class' => \yetopen\arh\ActiveRecordHistoryBehavior::className(),
                     'manager' => 'ManagerName',
                     'managerOptions' => [
                         ...
@@ -30,14 +30,14 @@ If you want use not default manager or set options for manager, you may use this
         }
 ```
 
-If you don't want to save some fields, you can use property ignoreFields (example, field "updated_at" if you use TimestampBehavior, [Issue #1](https://github.com/nhkey/yii2-activerecord-history/issues/1))
+If you don't want to save some fields, you can use property ignoreFields (example, field "updated_at" if you use TimestampBehavior, [Issue #1](https://github.com/yetopen/yii2-activerecord-history/issues/1))
 
 ```php
     class MyClass extends ActiveRecord {
      public function behaviors(){
             return [
                 'history' => [
-                    'class' => \nhkey\arh\ActiveRecordHistoryBehavior::className(),
+                    'class' => \yetopen\arh\ActiveRecordHistoryBehavior::className(),
                     'ignoreFields' => ['updated_at', 'some_other_field'],
                 ],
                 ...
@@ -76,15 +76,15 @@ If you need to retrieve the value of an attribute at a specific date-time, use t
 
 ### Example 1
 
-[FileManager](https://github.com/nhkey/yii2-activerecord-history/blob/master/docs/en/managers.md#filemanager): 
+[FileManager](https://github.com/yetopen/yii2-activerecord-history/blob/master/docs/en/managers.md#filemanager): 
 
 ```php
     class MyClass extends ActiveRecord {
      public function behaviors(){
             return [
                 'history' => [
-                    'class' => \nhkey\arh\ActiveRecordHistoryBehavior::className(),
-                    'manager' => '\nhkey\arh\managers\FileManager',
+                    'class' => \yetopen\arh\ActiveRecordHistoryBehavior::className(),
+                    'manager' => '\yetopen\arh\managers\FileManager',
                     'managerOptions' => [
                         'filePath' => '/home/logs/',
                         'isGenerateFilename' => true
@@ -101,8 +101,8 @@ or
      public function behaviors(){
             return [
                 'history' => [
-                    'class' => \nhkey\arh\ActiveRecordHistoryBehavior::className(),
-                    'manager' => '\nhkey\arh\managers\FileManager',
+                    'class' => \yetopen\arh\ActiveRecordHistoryBehavior::className(),
+                    'manager' => '\yetopen\arh\managers\FileManager',
                     'managerOptions' => [
                         'filename' => '/home/user/logs_app/MyClass.log',
                     ],
@@ -116,15 +116,15 @@ or
 
 #### Example 2
 
-[DBManager](https://github.com/nhkey/yii2-activerecord-history/blob/master/docs/en/managers.md#dbmanager): 
+[DBManager](https://github.com/yetopen/yii2-activerecord-history/blob/master/docs/en/managers.md#dbmanager): 
 
 ```php
     class MyClass extends ActiveRecord {
      public function behaviors(){
             return [
                 'history' => [
-                    'class' => \nhkey\arh\ActiveRecordHistoryBehavior::className(),
-                    'manager' => '\nhkey\arh\managers\DBManager',
+                    'class' => \yetopen\arh\ActiveRecordHistoryBehavior::className(),
+                    'manager' => '\yetopen\arh\managers\DBManager',
                     'managerOptions' => [
                         'tableName' => 'MyLogTable',
                     ],
@@ -135,7 +135,7 @@ or
 ```
 
 
-[Back To Main page](https://github.com/nhkey/yii2-activerecord-history/blob/master/README.md)
+[Back To Main page](https://github.com/yetopen/yii2-activerecord-history/blob/master/README.md)
 
 ## Controller ActiveRecordHistory
 Provides some actions for common utilities, for example to display all the changes of a model you can call

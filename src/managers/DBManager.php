@@ -4,7 +4,7 @@
  * @author Mikhail Mikhalev
  */
 
-namespace nhkey\arh\managers;
+namespace yetopen\arh\managers;
 
 use yii\db\Expression;
 use const SORT_DESC;
@@ -17,7 +17,7 @@ use yii\di\Instance;
 
 /**
  * Class DBManager for save history in DB
- * @package nhkey\arh
+ * @package yetopen\arh
  */
 class DBManager extends BaseManager
 {

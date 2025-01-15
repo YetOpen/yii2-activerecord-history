@@ -1,6 +1,6 @@
 <?php
 
-namespace nhkey\arh\controllers;
+namespace yetopen\arh\controllers;
 
 use Yii;
 use yii\data\ArrayDataProvider;

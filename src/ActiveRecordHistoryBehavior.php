@@ -4,9 +4,9 @@
  * @author Mikhail Mikhalev
  */
 
-namespace nhkey\arh;
+namespace yetopen\arh;
 
-use nhkey\arh\managers\BaseManager;
+use yetopen\arh\managers\BaseManager;
 use Yii;
 use yii\base\InvalidArgumentException;
 use yii\db\ActiveRecord;
@@ -24,7 +24,7 @@ class ActiveRecordHistoryBehavior extends Behavior
      * @var BaseManager This is manager for save history in some storage
      * Default value: DBManager.
      */
-    public $manager ='nhkey\arh\managers\DBManager';
+    public $manager ='yetopen\arh\managers\DBManager';
 
     /**
      * @var array This fields not to be saved in the history.

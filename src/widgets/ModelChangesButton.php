@@ -1,6 +1,6 @@
 <?php
 
-namespace nhkey\arh\widgets;
+namespace yetopen\arh\widgets;
 
 use Yii;
 use yii\base\InvalidConfigException;
