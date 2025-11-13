@@ -70,7 +70,7 @@ abstract class BaseManager implements ActiveRecordHistoryInterface
             $pkValue = Json::encode($pkValue);
         }
         $referrer = null;
-        if (!Yii::$app->request->isConsoleRequest) {
+        if (!Yii::$app->request->isConsoleRequest && Yii::$app->request->referrer !== null) {
             $referrer = substr(Yii::$app->request->referrer, 0, 255);
         }
         $data = [
