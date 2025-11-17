@@ -48,7 +48,7 @@ class ActiveRecordHistoryController extends Controller
             $changes = array_merge($changes, $model->changes());
         }
         usort($changes, function ($a, $b) {
-            return $a['id'] < $b['id'];
+            return $a['id'] <=> $b['id'];
         });
         $dataProvider = new ArrayDataProvider([
             'models' => $changes,

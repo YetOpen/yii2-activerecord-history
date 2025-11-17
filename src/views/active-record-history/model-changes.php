@@ -69,7 +69,11 @@ $columns = [
     'user_id' => [
         'attribute' => 'user_id',
         'value' => function($model) use ($userClass) {
-            return $userClass::findOne($model['user_id']);
+            if (is_string($userClass) && class_exists($userClass)) {
+                $user = $userClass::findOne($model['user_id']);
+                return $user ? $user->username ?? $user->id : null;
+            }
+            return null;
         },
         'label' => Yii::t('arh', 'User'),
     ],
