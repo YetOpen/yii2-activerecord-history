@@ -99,7 +99,7 @@ class ActiveRecordHistoryController extends Controller
                         "id" => $record['id'],
                         "date" => $record['date'],
                         "table" => $record['table'],
-                        "field_name" => $key,
+                        "field_name" => is_numeric($key) ? $record['field_name'] : $key,
                         "field_id" => $record['field_id'],
                         "old_value" => $oldValue ?: null,
                         "new_value" => $newValue ?: null,
