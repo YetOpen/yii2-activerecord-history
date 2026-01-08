@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://mikhailmikhalev.ru
  * @author Mikhail Mikhalev
@@ -7,6 +8,7 @@
 namespace nhkey\arh;
 
 use nhkey\arh\managers\BaseManager;
+use nhkey\arh\managers\YDBManager;
 use Yii;
 use yii\base\Behavior;
 use yii\base\InvalidArgumentException;
@@ -21,10 +23,10 @@ class ActiveRecordHistoryBehavior extends Behavior
 {
 
     /**
-     * @var BaseManager This is manager for save history in some storage
+     * @var BaseManager|YBaseManager This is manager for save history in some storage
      * Default value: DBManager.
      */
-    public $manager ='nhkey\arh\managers\DBManager';
+    public $manager = 'nhkey\arh\managers\DBManager';
 
     /**
      * @var array This fields not to be saved in the history.
@@ -85,7 +87,8 @@ class ActiveRecordHistoryBehavior extends Behavior
      * @var array Get Yii2 event name from behavior event name
      * @return array|string
      */
-    public function getEventName($event){
+    public function getEventName($event)
+    {
         $eventNames = [
             BaseManager::AR_INSERT => BaseActiveRecord::EVENT_AFTER_INSERT,
             BaseManager::AR_UPDATE => BaseActiveRecord::EVENT_AFTER_UPDATE,
@@ -94,13 +97,12 @@ class ActiveRecordHistoryBehavior extends Behavior
 
         ];
         return isset($eventNames[$event]) ? $eventNames[$event] : $eventNames;
-
     }
 
     public function events()
     {
         $events = [];
-        foreach ($this->eventsList as $event){
+        foreach ($this->eventsList as $event) {
             $events[$this->getEventName($event)] = 'saveHistory';
         }
         return $events;
@@ -112,10 +114,9 @@ class ActiveRecordHistoryBehavior extends Behavior
      */
     public function saveHistory($event)
     {
-        $manager = new $this->manager;
-        $manager->setOptions($this->managerOptions);
+        $manager = $this->getManagerInstance();
 
-        switch ($event->name){
+        switch ($event->name) {
             case BaseActiveRecord::EVENT_AFTER_INSERT:
                 $type = $manager::AR_INSERT;
                 $changedAttributes = $event->changedAttributes;
@@ -124,7 +125,7 @@ class ActiveRecordHistoryBehavior extends Behavior
                         unset($changedAttributes[$ignoreField]);
                 }
                 $manager->setUpdatedFields($changedAttributes);
-                if($this->saveUpdatesInSession) {
+                if ($this->saveUpdatesInSession) {
                     $this->storeInSession($type);
                 }
                 break;
@@ -144,7 +145,7 @@ class ActiveRecordHistoryBehavior extends Behavior
                         unset($changedAttributes[$ignoreField]);
 
                 $manager->setUpdatedFields($changedAttributes);
-                if(!empty($changedAttributes) && $this->saveUpdatesInSession) {
+                if (!empty($changedAttributes) && $this->saveUpdatesInSession) {
                     $this->storeInSession($type);
                 }
                 break;
@@ -177,8 +178,8 @@ class ActiveRecordHistoryBehavior extends Behavior
         if (in_array($attribute, $this->hideFields, true)) {
             return null;
         }
-        $manager = new $this->manager;
-        $manager->setOptions($this->managerOptions);
+
+        $manager = $this->getManagerInstance();
 
         $field = $manager->getData($attribute, $this->owner);
         if (!$field) {
@@ -199,13 +200,12 @@ class ActiveRecordHistoryBehavior extends Behavior
      */
     public function changes($format = false)
     {
-        $manager = new $this->manager;
-        $manager->setOptions($this->managerOptions);
+        $manager = $this->getManagerInstance();
 
         $fields = $manager->getAllData($this->owner);
         $fields = $this->filterHiddenFields($fields);
         if ($format) {
-            foreach ($fields AS $k => $field) {
+            foreach ($fields as $k => $field) {
                 $fields[$k]['old_value'] = BaseManager::applyFormat($field, $this->historyDisplayConfig, true);
                 $fields[$k]['new_value'] = BaseManager::applyFormat($field, $this->historyDisplayConfig);
             }
@@ -229,87 +229,86 @@ class ActiveRecordHistoryBehavior extends Behavior
     }
 
     /**
-    * Returns the dates in which an attribute is changed, if from_to is set it
-    * reports only the related dates in which the attribute is hanged from
-    * a specified value to another
-    * for example $model->changesDatesAttribute('active", ["1","0"] reports a
-    * string with the dates in which the model->active is passed from "1" to "0"
-    * @param string $attribute
-    * @param array $from_to if set must contain 2 values [old_value, new_value]
-    * @param string $sep default <br />
-    * @param string $format default "date" (but also datetime can be used)
-    * @return string
-    */
-   public function changesDatesAttribute($attribute, $from_to=[], $sep="<br />", $format="date" )
-   {
-       $manager = new $this->manager;
-       $manager->setOptions($this->managerOptions);
-       $fields = $manager->getAllData($this->owner);
-       $dates = [];
-       foreach ($fields AS $k => $field) {
-           if (in_array($field['field_name'], $this->hideFields, true)) {
-               continue;
-           }
-           if ($field['field_name']===$attribute){
-               $data = Yii::$app->formatter->asDate($field['date']);
-               if ($format=="datetime"){
-                   $data = Yii::$app->formatter->asDatetime($field['date']);
-               }
-               $add = [$data];
-               // if from_to is specified the different changes are ignored
-               if (count($from_to)==2 && ($field['old_value']!=$from_to[0] ||  $field['new_value']!=$from_to[1])){
-                   $add = [];
-               }
-              $dates = array_merge($dates, $add);
-           }
-       }
-       return implode($sep, $dates);
-   }
+     * Returns the dates in which an attribute is changed, if from_to is set it
+     * reports only the related dates in which the attribute is hanged from
+     * a specified value to another
+     * for example $model->changesDatesAttribute('active", ["1","0"] reports a
+     * string with the dates in which the model->active is passed from "1" to "0"
+     * @param string $attribute
+     * @param array $from_to if set must contain 2 values [old_value, new_value]
+     * @param string $sep default <br />
+     * @param string $format default "date" (but also datetime can be used)
+     * @return string
+     */
+    public function changesDatesAttribute($attribute, $from_to = [], $sep = "<br />", $format = "date")
+    {
+        $manager = $this->getManagerInstance();
+        $fields = $manager->getAllData($this->owner);
+        $dates = [];
+        foreach ($fields as $k => $field) {
+            if (in_array($field['field_name'], $this->hideFields, true)) {
+                continue;
+            }
+            if ($field['field_name'] === $attribute) {
+                $data = Yii::$app->formatter->asDate($field['date']);
+                if ($format == "datetime") {
+                    $data = Yii::$app->formatter->asDatetime($field['date']);
+                }
+                $add = [$data];
+                // if from_to is specified the different changes are ignored
+                if (count($from_to) == 2 && ($field['old_value'] != $from_to[0] ||  $field['new_value'] != $from_to[1])) {
+                    $add = [];
+                }
+                $dates = array_merge($dates, $add);
+            }
+        }
+        return implode($sep, $dates);
+    }
 
     /**
      * @return array|null the infos stored in session.
      */
-   protected function getSession()
-   {
-       return Yii::$app->session->get($this->sessionKey);
-   }
+    protected function getSession()
+    {
+        return Yii::$app->session->get($this->sessionKey);
+    }
 
     /**
      * @return array The infos stored in session for the model class of the owner.
      * @throws \Exception
      */
-   protected function getModelSession()
-   {
-       return ArrayHelper::getValue($this->getSession(), $this->owner->formName(), []);
-   }
+    protected function getModelSession()
+    {
+        return ArrayHelper::getValue($this->getSession(), $this->owner->formName(), []);
+    }
 
     /**
      * Stores the id of the model in session as key and the type of operation as value.
      * @param mixed $type Event types of history to the AR object, as declared in the manager
      * @return void
      */
-   protected function storeInSession($type)
-   {
-       $modelSession = $this->getSession();
-       $modelSession[$this->owner->formName()][$this->owner->getPrimaryKey()] = $type;
-       Yii::$app->session->set($this->sessionKey, $modelSession);
-   }
+    protected function storeInSession($type)
+    {
+        $modelSession = $this->getSession();
+        $modelSession[$this->owner->formName()][$this->owner->getPrimaryKey()] = $type;
+        Yii::$app->session->set($this->sessionKey, $modelSession);
+    }
 
     /**
      * @return bool|null If the model has been inserted or modified in the current session. If saving in session is
      * disabled it will return `null`.
      * @throws \Exception
      */
-   public function getHasBeenModified()
-   {
-       if(!$this->saveUpdatesInSession) {
-           return null;
-       }
+    public function getHasBeenModified()
+    {
+        if (!$this->saveUpdatesInSession) {
+            return null;
+        }
 
-       $manager = new $this->manager;
-       $sessionVal = ArrayHelper::getValue($this->getModelSession(), $this->owner->getPrimaryKey());
-       return in_array($sessionVal, [$manager::AR_UPDATE, $manager::AR_UPDATE_PK]);
-   }
+        $manager = $this->getManagerInstance();
+        $sessionVal = ArrayHelper::getValue($this->getModelSession(), $this->owner->getPrimaryKey());
+        return in_array($sessionVal, [$manager::AR_UPDATE, $manager::AR_UPDATE_PK]);
+    }
 
     /**
      * @return bool|null If the model has been inserted or modified in the current session. If saving in session is
@@ -318,11 +317,11 @@ class ActiveRecordHistoryBehavior extends Behavior
      */
     public function getHasBeenInserted()
     {
-        if(!$this->saveUpdatesInSession) {
+        if (!$this->saveUpdatesInSession) {
             return null;
         }
 
-        $manager = new $this->manager;
+        $manager = $this->getManagerInstance();
         $type = $manager::AR_INSERT;
         return ArrayHelper::getValue($this->getModelSession(), $this->owner->getPrimaryKey()) == $type;
     }
@@ -335,11 +334,38 @@ class ActiveRecordHistoryBehavior extends Behavior
      */
     public function valueWas($attribute, $date)
     {
-        if(!\DateTime::createFromFormat('Y-m-d H:i:s', $date)) {
+        if (!\DateTime::createFromFormat('Y-m-d H:i:s', $date)) {
             throw new InvalidArgumentException('The date must be passed with format "Y-m-d H:i:s"');
         }
-        /** @var BaseManager $manager */
-        $manager = new $this->manager;
+        /** @var BaseManager|YBaseManager $manager */
+        $manager = $this->getManagerInstance();
         return $manager->getRecordValueAt($this->owner, $attribute, $date);
+    }
+
+    /**
+     * @return BaseManager|YBaseManager
+     * @throws \yii\base\InvalidConfigException
+     */
+    protected function getManagerInstance()
+    {
+        $manager = new $this->manager;
+        $options = $this->managerOptions ?: [];
+
+        // If the manager is YDBManager and no tableName is specified we generate it
+        if ($manager instanceof YDBManager && empty($options['tableName'])) {
+            $options['tableName'] = $this->generateTableName();
+        }
+
+        $manager->setOptions($options);
+        return $manager;
+    }
+
+    /**
+     * Generates the table name for history storage based on the owner's table name
+     * @return string
+     */
+    protected function generateTableName()
+    {
+        return 'modelhistory_' . \Yii::$app->db->getTableSchema($this->owner::tableName())->name;
     }
 }
