@@ -8,7 +8,7 @@
 namespace nhkey\arh;
 
 use nhkey\arh\managers\BaseManager;
-use nhkey\arh\managers\YDBManager;
+use nhkey\arh\managers\DedicatedTableManager;
 use Yii;
 use yii\base\Behavior;
 use yii\base\InvalidArgumentException;
@@ -23,7 +23,7 @@ class ActiveRecordHistoryBehavior extends Behavior
 {
 
     /**
-     * @var BaseManager|YBaseManager This is manager for save history in some storage
+     * @var BaseManager This is manager for save history in some storage
      * Default value: DBManager.
      */
     public $manager = 'nhkey\arh\managers\DBManager';
@@ -337,13 +337,13 @@ class ActiveRecordHistoryBehavior extends Behavior
         if (!\DateTime::createFromFormat('Y-m-d H:i:s', $date)) {
             throw new InvalidArgumentException('The date must be passed with format "Y-m-d H:i:s"');
         }
-        /** @var BaseManager|YBaseManager $manager */
+        /** @var BaseManager $manager */
         $manager = $this->getManagerInstance();
         return $manager->getRecordValueAt($this->owner, $attribute, $date);
     }
 
     /**
-     * @return BaseManager|YBaseManager
+     * @return BaseManager
      * @throws \yii\base\InvalidConfigException
      */
     protected function getManagerInstance()
@@ -351,8 +351,8 @@ class ActiveRecordHistoryBehavior extends Behavior
         $manager = new $this->manager;
         $options = $this->managerOptions ?: [];
 
-        // If the manager is YDBManager and no tableName is specified we generate it
-        if ($manager instanceof YDBManager && empty($options['tableName'])) {
+        // If the manager is DedicatedTableManager and no tableName is specified we generate it
+        if ($manager instanceof DedicatedTableManager && empty($options['tableName'])) {
             $options['tableName'] = $this->generateTableName();
         }
 

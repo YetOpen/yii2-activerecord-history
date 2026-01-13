@@ -53,6 +53,33 @@ class DBManager extends BaseManager
     /**
      * @inheritdoc
      */
+    public function getData($attribute, $object)
+    {
+        $filter = [
+            'table' => $object->tableName(),
+            'field_id' => new Expression("'{$object->getPrimaryKey()}'"),
+            'field_name' => $attribute,
+        ];
+        $order = ['id' => SORT_DESC];
+        return $this->getField($filter, $order);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAllData($object)
+    {
+        $filter = [
+            'table' => $object->tableName(),
+            'field_id' => new Expression("'{$object->getPrimaryKey()}'"),
+        ];
+        $order = ['id' => SORT_DESC, 'type' => SORT_DESC];
+        return $this->getFields($filter, $order);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getRecordValueAt($object, $attribute, $date)
     {
         // We assume that for future dates the value will stay the same since we have no way to know it
@@ -116,7 +143,7 @@ class DBManager extends BaseManager
     /**
      * @return Query
      */
-    private function prepareBaseQuery()
+    protected function prepareBaseQuery()
     {
         return (new Query())->from($this->tableName);
     }
@@ -127,7 +154,7 @@ class DBManager extends BaseManager
      * @return \yii\db\Command
      * @throws \yii\base\InvalidConfigException
      */
-    private function prepareQuery(array $filter, array $order)
+    protected function prepareQuery(array $filter, array $order)
     {
         $query = $this->prepareBaseQuery();
         $query->select('*')->andWhere($filter)->orderBy($order);
@@ -138,7 +165,7 @@ class DBManager extends BaseManager
      * @return Connection Return database connection
      * @throws \yii\base\InvalidConfigException
      */
-    private static function getDB()
+    protected static function getDB()
     {
         return Instance::ensure(self::$db, Connection::className());
     }
