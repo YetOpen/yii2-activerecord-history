@@ -4,7 +4,7 @@
 There is old method for use this extension and not supported after version 1.1.0
  
 
-To use this extension, simply change the parent class from \yii\db\ActiveRecord to \nhkey\arh\ActiveRecordHistory 
+To use this extension, simply change the parent class from \yii\db\ActiveRecord to \yetopen\arh\ActiveRecordHistory 
 
 For example:
 
@@ -33,12 +33,12 @@ If you want to optain the log records corresponding to all the changes of a mode
 
 #### Example 1
 
-[FileManager](https://github.com/nhkey/yii2-activerecord-history/blob/master/docs/en/managers#filemanager):
+[FileManager](https://github.com/yetopen/yii2-activerecord-history/blob/master/docs/en/managers#filemanager):
 
 ```php
-    class MyClass extends \nhkey\arh\ActiveRecordHistory
+    class MyClass extends \yetopen\arh\ActiveRecordHistory
     {
-        $_historyManager = '\nhkey\arh\managers\FileManager'
+        $_historyManager = '\yetopen\arh\managers\FileManager'
         $_optionsHistoryManager = [
             'filename' => '/home/user/MyClass.log',
             ];
@@ -48,10 +48,10 @@ If you want to optain the log records corresponding to all the changes of a mode
 
 #### Example 2
 
-[DBManager](https://github.com/nhkey/yii2-activerecord-history/blob/master/docs/en/managers#dbmanager):
+[DBManager](https://github.com/yetopen/yii2-activerecord-history/blob/master/docs/en/managers#dbmanager):
 
 ```php
-    class MyClass extends \nhkey\arh\ActiveRecordHistory
+    class MyClass extends \yetopen\arh\ActiveRecordHistory
     {
         ...
     }

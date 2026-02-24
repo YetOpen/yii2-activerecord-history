@@ -4,14 +4,14 @@
  * @author Mikhail Mikhalev
  */
 
-namespace nhkey\arh;
+namespace yetopen\arh;
 
-use nhkey\arh\managers\BaseManager;
+use yetopen\arh\managers\BaseManager;
 use Yii;
 
 /**
  * Class ActiveRecordHistory
- * @package nhkey\arh
+ * @package yetopen\arh
  * @deprecated
  */
 class ActiveRecordHistory extends \yii\db\ActiveRecord
@@ -20,7 +20,7 @@ class ActiveRecordHistory extends \yii\db\ActiveRecord
     /**
      * @var BaseManager
      */
-    protected $_historyManager = 'nhkey\arh\managers\DBManager';
+    protected $_historyManager = 'yetopen\arh\managers\DBManager';
 
     /**
      * @var array

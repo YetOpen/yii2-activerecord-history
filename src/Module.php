@@ -6,14 +6,14 @@
  * Time: 12:59
  */
 
-namespace nhkey\arh;
+namespace yetopen\arh;
 
-use nhkey\arh\widgets\ModelChangesButton;
+use yetopen\arh\widgets\ModelChangesButton;
 use yii\base\Module AS BaseModule;
 
 class Module extends BaseModule
 {
-    public $controllerNamespace = 'nhkey\arh\controllers';
+    public $controllerNamespace = 'yetopen\arh\controllers';
 
     public $allowedPermissions = [];
 

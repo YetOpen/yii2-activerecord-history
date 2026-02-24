@@ -1,8 +1,8 @@
 <?php
 
-use nhkey\arh\managers\BaseManager;
+use yetopen\arh\managers\BaseManager;
 use yii\grid\GridView;
-use nhkey\arh\managers\ActiveRecordHistoryInterface;
+use yetopen\arh\managers\ActiveRecordHistoryInterface;
 
 $module = Yii::$app->getModule('arh');
 $userClass = $module->userClass;
